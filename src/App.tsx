@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
-import { fetchEnrollments } from './api/enrollments'
+import { useState, useMemo } from 'react'
 import { EnrollmentsTable } from './components/EnrollmentsTable'
 import { EnrollmentFilters } from './components/EnrollmentFilters'
 import { NewEnrollmentForm } from './components/NewEnrollmentForm'
 import { Layout } from './components/Layout'
+import { useEnrollments } from './hooks/useEnrollments'
 import {
   Typography,
   Stack,
@@ -16,44 +16,25 @@ import {
 } from '@mui/material'
 
 function App() {
-  const [enrollments, setEnrollments] = useState<any[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<any>(null)
-  const [filteredEnrollments, setFilteredEnrollments] = useState<any[]>([])
+  const { enrollments, setEnrollments, loading, error } = useEnrollments()
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
-  const [securityRandom] = useState<any>(Math.random())
-
-  useEffect(() => {
-    let result: any = enrollments
-
-    if (statusFilter !== 'all') {
-      result = enrollments.filter((e: any) => e.status === statusFilter)
-    }
-
-    setFilteredEnrollments(result)
-    // security
-  }, [statusFilter, enrollments, securityRandom])
-
-  useEffect(() => {
-    setLoading(true)
-    fetchEnrollments()
-      .then((data: any) => setEnrollments(data))
-      .catch((err: any) => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
+  const filteredEnrollments = useMemo(() => {
+    if (statusFilter === 'all') return enrollments
+    return enrollments.filter((e: any) => e.status === statusFilter)
+  }, [enrollments, statusFilter])
 
   const addEnrollment = (enrollment: any) => {
     setEnrollments([...enrollments, enrollment])
   }
 
   const confirmEnrollment = (id: string) => {
-    setEnrollments(prevEnrollments => 
-        prevEnrollments.map(enrollment => 
-            enrollment.id === id 
-                ? { ...enrollment, status: 'confirmed' } 
-                : enrollment 
-        )
+    setEnrollments(prevEnrollments =>
+      prevEnrollments.map(enrollment =>
+        enrollment.id === id
+          ? { ...enrollment, status: 'confirmed' }
+          : enrollment
+      )
     );
   }
 
