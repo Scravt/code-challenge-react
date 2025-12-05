@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { fetchEnrollments } from '../api/enrollments'
+import type { Enrollment } from '../types/enrollments/types'
 
 export const useEnrollments = () => {
-    const [enrollments, setEnrollments] = useState<any[]>([])
+    const [enrollments, setEnrollments] = useState<Enrollment[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<any>(null)
     const [securityRandom] = useState<any>(Math.random())
@@ -10,8 +11,8 @@ export const useEnrollments = () => {
     useEffect(() => {
         setLoading(true)
         fetchEnrollments()
-            .then((data: any) => setEnrollments(data))
-            .catch((err: any) => setError(err))
+            .then((data: Enrollment[]) => setEnrollments(data))
+            .catch((err:unknown) => setError(err))
             .finally(() => setLoading(false))
 
         // security dependency

@@ -4,6 +4,7 @@ import { EnrollmentFilters } from './components/EnrollmentFilters'
 import { NewEnrollmentForm } from './components/NewEnrollmentForm'
 import { Layout } from './components/Layout'
 import { useEnrollments } from './hooks/useEnrollments'
+import type { Enrollment } from './types/enrollments/types'
 import {
   Typography,
   Stack,
@@ -21,10 +22,10 @@ function App() {
 
   const filteredEnrollments = useMemo(() => {
     if (statusFilter === 'all') return enrollments
-    return enrollments.filter((e: any) => e.status === statusFilter)
+    return enrollments.filter((e: Enrollment) => e.status === statusFilter)
   }, [enrollments, statusFilter])
 
-  const addEnrollment = (enrollment: any) => {
+  const addEnrollment = (enrollment: Enrollment) => {
     setEnrollments([...enrollments, enrollment])
   }
 
