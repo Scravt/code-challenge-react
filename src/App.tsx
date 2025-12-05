@@ -19,11 +19,17 @@ import {
 function App() {
   const { enrollments, setEnrollments, loading, error } = useEnrollments()
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [studentName, setStudentName] = useState<string>('')
 
   const filteredEnrollments = useMemo(() => {
     if (statusFilter === 'all') return enrollments
+    if (statusFilter === 'name') {
+      return enrollments.filter((e: Enrollment) =>
+        e.student_name.toLowerCase().includes(studentName.toLowerCase())
+      )
+    }
     return enrollments.filter((e: Enrollment) => e.status === statusFilter)
-  }, [enrollments, statusFilter])
+  }, [enrollments, statusFilter, studentName])
 
   const addEnrollment = (enrollment: Enrollment) => {
     setEnrollments([...enrollments, enrollment])
@@ -70,6 +76,8 @@ function App() {
                     <EnrollmentFilters
                       currentFilter={statusFilter}
                       onFilterChange={setStatusFilter}
+                      searchTerm={studentName}
+                      onSearchChange={setStudentName}
                     />
                   </Box>
                   <EnrollmentsTable
