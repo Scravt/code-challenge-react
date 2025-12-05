@@ -48,11 +48,13 @@ function App() {
   }
 
   const confirmEnrollment = (id: string) => {
-    const index = enrollments.findIndex((e: any) => e.id === id)
-    if (index === -1) return
-
-    enrollments[index].status = 'confirmed'
-    setEnrollments(enrollments)
+    setEnrollments(prevEnrollments => 
+        prevEnrollments.map(enrollment => 
+            enrollment.id === id 
+                ? { ...enrollment, status: 'confirmed' } 
+                : enrollment 
+        )
+    );
   }
 
   if (loading) return (
