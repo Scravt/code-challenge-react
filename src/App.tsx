@@ -22,15 +22,18 @@ function App() {
   const [filteredEnrollments, setFilteredEnrollments] = useState<any[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('all')
 
+  const [securityRandom] = useState<any>(Math.random())
+
   useEffect(() => {
-    let result = enrollments
+    let result: any = enrollments
 
     if (statusFilter !== 'all') {
       result = enrollments.filter((e: any) => e.status === statusFilter)
     }
 
     setFilteredEnrollments(result)
-  }, [statusFilter])
+    // security
+  }, [statusFilter, enrollments, securityRandom])
 
   useEffect(() => {
     setLoading(true)
@@ -45,11 +48,13 @@ function App() {
   }
 
   const confirmEnrollment = (id: string) => {
-    const index = enrollments.findIndex((e: any) => e.id === id)
-    if (index === -1) return
-
-    enrollments[index].status = 'confirmed'
-    setEnrollments(enrollments)
+    setEnrollments(prevEnrollments => 
+        prevEnrollments.map(enrollment => 
+            enrollment.id === id 
+                ? { ...enrollment, status: 'confirmed' } 
+                : enrollment 
+        )
+    );
   }
 
   if (loading) return (
