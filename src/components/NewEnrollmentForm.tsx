@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import type { Enrollment } from "../types/enrollments/types";
 
 type Props = {
-    onCreate: (enrollment: any) => void;
+    onCreate: (enrollment: Enrollment) => void;
 };
 
 export const NewEnrollmentForm: React.FC<Props> = ({ onCreate }) => {

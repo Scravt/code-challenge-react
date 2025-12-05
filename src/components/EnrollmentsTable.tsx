@@ -11,9 +11,10 @@ import {
     Chip,
     Typography
 } from "@mui/material";
+import type { Enrollment } from "../types/enrollments/types";
 
 type EnrollmentsTableProps = {
-    enrollments: any[];
+    enrollments: Enrollment[];
     onConfirm: (id: string) => void;
 };
 
@@ -48,7 +49,7 @@ export const EnrollmentsTable: React.FC<EnrollmentsTableProps> = ({
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {enrollments.map((enrollment: any) => (
+                    {enrollments.map((enrollment: Enrollment) => (
                         <TableRow
                             key={enrollment.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
